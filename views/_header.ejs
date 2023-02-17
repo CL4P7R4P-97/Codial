@@ -1,20 +1,11 @@
-<h1>
-<h5>
-    
-    <ul>
-        <% if(locals.user){ %>
 
-          <li>  <a href="/user/profile"> <%= user.name %></a></li>
-    <li><a href="/user/logout">Logout</a></li>
+<div class="topnav">
+    <span id="site">Codial</span>
+    <% if(locals.user){ %>
+    <a class="links" href="/user/profile"> <%= user.name %></a>
+    <a class="links" href="/user/logout">Logout</a>
     <% } else{ %>
-
-        <li><a href="/user/login">Login</a></li>
-        <li><a href="/user/signup">Signup</a></li>
-<% } %>
-    </ul>
-    
-</h5>
-    Header
-</h1>
-
-<hr>
+        <a class="links" href="/user/login">Login</a>
+        <a class="links" href="/user/signup">Signup</a>
+        <% } %>
+  </div>

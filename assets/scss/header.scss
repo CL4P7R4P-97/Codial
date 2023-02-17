@@ -1,0 +1,44 @@
+$color_1: #f2f2f2;
+$color_2: black;
+$color_3: white;
+$background-color_1: #333;
+$background-color_2: #ddd;
+$background-color_3: #04AA6D;
+
+/* Style the links inside the navigation bar */
+/* Change the color of links on hover */
+/* Add a color to the active/current link */
+.topnav {
+	background-color: $background-color_1;
+	overflow: hidden;
+
+    #site {
+
+        font-family: sans-serif;
+        color: yellow;
+        font-size: xx-large;
+        font-weight: 900;
+        float: left;
+    }
+    
+
+	a {
+		float: right;
+		color: $color_1;
+		text-align: center;
+		padding: 14px 16px;
+        
+		text-decoration: none;
+		font-size: 17px;
+		&:hover {
+			background-color: $background-color_2;
+			color: $color_2;
+		}
+
+      
+	}
+	a.active {
+		background-color: $background-color_3;
+		color: $color_3;
+	}
+}

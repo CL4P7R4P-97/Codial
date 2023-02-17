@@ -19,6 +19,18 @@ const passportt = require('./config/passport-local-startegy');
 //for saving user session to prevent server restart auto logout
 const mongoStore = require('connect-mongo')(session);
 
+//adding scss module
+const sassMiddleware = require('node-sass-middleware');
+
+app.use(sassMiddleware({
+    src: './assets/scss',
+    dest: './assets/css',
+    debug: true,
+    outputStyle: 'extended',
+    //where to look for css
+    prefix: '/css'
+}));
+
 //for stream data extraction
 app.use(express.urlencoded());
 app.use(cookieParser());
