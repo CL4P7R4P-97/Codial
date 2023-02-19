@@ -1,0 +1,7 @@
+
+<% if(locals.user) { %>
+    <% if(locals.user.id = post.user._id) {%>
+    <a href="/posts/deletePost/<%=post._id %>">(X)</a>
+    <% } %>
+    <% } %>
+<div><%= post.content %></div>
