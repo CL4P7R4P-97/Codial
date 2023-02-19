@@ -20,5 +20,6 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 });
 
+//important to see the model name 'Name' while using in populate method of mongoose
 const User = mongoose.model('User',userSchema);
 module.exports = User;

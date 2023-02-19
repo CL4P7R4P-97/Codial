@@ -1,12 +1,25 @@
  
     
-    <h1>Home</h1>
+    <h1><%= title %></h1>
 
     <section>
+        <% if(locals.user) {%>
         <h4>Share post</h4>
-        <form action="" method="post">
-            <textarea name="content" id="" cols="30" rows="10" placeholder="What's on you mind?"></textarea>
+        <form action="/posts/create" method="post">
+            <textarea name="content" id="" cols="30" rows="10" placeholder="What's on you mind?" required></textarea>
             <input type="submit" value="Post">
         </form>
+        <%}%>
+    </section>
+
+    <hr>
+    <section>
+        <h3>See what's happening around you & your peeps</h3>
+        <div>
+                <% for (post of posts) {%>
+            <div><%= post.content %></div>
+            <div>Posted by: <%= post.user.name %></div>
+            <%}%>
+        </div>
     </section>
     
