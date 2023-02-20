@@ -8,7 +8,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');
 
 console.log("router loaded");
-router.get('/profile',passport.checkAuthentication, userController.profile );
+router.get('/profile/:id',passport.checkAuthentication, userController.profile );
 router.get('/edit', userController.edit);
 
 
@@ -25,5 +25,14 @@ router.post('/create-user',userController.createUser);
 
 //logout
 router.get('/logout',userController.destroySession);
+
+//getting usersList
+
+router.get('/profile/:userId', passport.checkAuthentication, userController.otherUserProfile);
+
+
+//updating profile 
+
+router.post('/profile/udpate/:userId', passport.checkAuthentication, userController.updateProfile);
 
 module.exports  = router;

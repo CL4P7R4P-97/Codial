@@ -2,7 +2,7 @@
 <div class="topnav">
     <span ><a id="site" href="/">Codial</a></span>
     <% if(locals.user){ %>
-    <a class="links" href="/user/profile"> <%= user.name %></a>
+    <a class="links" href="/user/profile/<%= user.id %>"> <%= user.name %></a>
     <a class="links" href="/user/logout">Logout</a>
     <% } else{ %>
         <a class="links" href="/user/login">Login</a>

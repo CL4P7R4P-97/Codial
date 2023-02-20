@@ -1,11 +1,11 @@
-const userSchema = require('../models/user');
+const User = require('../models/user');
 
 module.exports.profile = function(req,res){
 
 
 //    if(req.cookies.user_id){
  
-//     userSchema.findById( req.cookies.user_id, function(err,user){
+//     User.findById( req.cookies.user_id, function(err,user){
 
 //         if(err){
 //             console.log("error occured at db");
@@ -23,7 +23,14 @@ module.exports.profile = function(req,res){
 
 //   
 
-return res.render('profile',{title: "Profile"});
+User.findById(req.params.id, function(err, user){
+
+    if(err){
+        return res.redirect('/');
+    }
+    
+    return res.render('profile',{title: "Profile", profile_user: user});
+})
 
 }
 
@@ -40,7 +47,7 @@ module.exports.login = function(req,res){
 
 module.exports.createSession = function(req,res){
 
-// res.cookies = userSchema.find({email:req.body.email},
+// res.cookies = User.find({email:req.body.email},
 //     function(err,data){
 //         if(err){
 //             console.log("User not found");
@@ -79,7 +86,7 @@ module.exports.createUser = function(req,res){
         return res.redirect('home',{title: "Home"});
     }
 
-    userSchema.findOne({
+    User.findOne({
         email: req.body.email,
           
     },function(err,user){
@@ -96,7 +103,7 @@ module.exports.createUser = function(req,res){
             }
             else{
               
-                userSchema.create({
+                User.create({
                     name: req.body.username,
                     password: req.body.password,
                     email: req.body.email
@@ -137,4 +144,40 @@ module.exports.destroySession  = function(req,res){
 module.exports.edit = function(req,res){
 
    return res.end('<h1>Edit</h1>');
+}
+
+module.exports.otherUserProfile = function(req,res){
+
+    User.findById(req.params.userId, function(err, user){
+
+        if(err){
+            console.log(err);
+            res.redirect('/');
+        }
+
+        return res.render('profile',{title: user.name, profile_user: user} );
+    
+        
+    });
+
+}
+
+
+module.exports.updateProfile = function(req,res){
+
+    if(req.user.id == req.params.userId){
+
+        User.findByIdAndUpdate(req.params.userId, {name: req.body.name, email: req.body.email}, function(err, data){
+            if(err){
+                console.log("err while updating");
+                return res.redirect('/');
+            }
+
+            console.log(data);
+            return res.redirect('/');
+        });
+    }
+    else{
+        return res.status(401).send('Unauthorized');
+    }
 }

@@ -1,6 +1,6 @@
 const post = require('../models/post');
 const comment = require('../models/comment');
-
+const User = require('../models/user');
 module.exports.home = function(req,res  ){
 
 
@@ -16,13 +16,23 @@ module.exports.home = function(req,res  ){
    })
    .exec( function(err,posts){
 
-    
     if(err){
         console.log(err);
-        return;
+        return res.redirect('/');
     }
+
+    User.find({}, function(err,users){
+
+        if(err){
+            console.log(err);
+            return res.redirect('/');
+        }
+        
     console.log(posts.comments);
-    return res.render('home',{title:"Codial | Home", posts: posts});
+    return res.render('home',{title:"Codial | Home", posts: posts, users: users});
+
+    });
    });
     
 };
+
