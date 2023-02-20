@@ -1,6 +1,6 @@
 const User = require('../models/user');
 
-module.exports.profile = function(req,res){
+module.exports.profile = async function(req,res){
 
 
 //    if(req.cookies.user_id){
@@ -23,20 +23,21 @@ module.exports.profile = function(req,res){
 
 //   
 
-User.findById(req.params.id, function(err, user){
-
-    if(err){
-        return res.redirect('/');
-    }
-    
-    return res.render('profile',{title: "Profile", profile_user: user});
-})
+try{
+    let user = await User.findById(req.params.id);
+return res.render('profile',{title: "Profile", profile_user: user});
+}
+catch(err){
+    console.log(err);
+}
 
 }
 
 module.exports.login = function(req,res){
 
     if(req.isAuthenticated()){
+
+        req.flash('success', 'Logged in successfully');
 
         return res.render('home',{title: "Home"});
     }
@@ -66,6 +67,8 @@ module.exports.createSession = function(req,res){
 //         }
 //     })
     
+req.flash('success', 'LoggedIn successfully');
+
             return res.redirect('/');
 } 
 
@@ -135,9 +138,13 @@ module.exports.createUser = function(req,res){
 module.exports.destroySession  = function(req,res){
 
     //previously it was normal function but now its async function 
+   
+   
     req.logout(function(err){
-        console.log(err || "Logged out");
-    })
+        console.log(err );
+    });
+    req.flash('success', 'LoggedOut successfully');
+    
     return res.redirect('/');
 }
 
@@ -146,20 +153,17 @@ module.exports.edit = function(req,res){
    return res.end('<h1>Edit</h1>');
 }
 
-module.exports.otherUserProfile = function(req,res){
+module.exports.otherUserProfile = async function(req,res){
 
-    User.findById(req.params.userId, function(err, user){
+  try{
+    let user = await User.findById(req.params.userId);
 
-        if(err){
-            console.log(err);
-            res.redirect('/');
-        }
+    return res.render('profile',{title: user.name, profile_user: user} );
+  }
+  catch(err){
 
-        return res.render('profile',{title: user.name, profile_user: user} );
-    
-        
-    });
-
+    console.log(err);
+  }
 }
 
 

@@ -19,6 +19,12 @@ const passportt = require('./config/passport-local-startegy');
 //for saving user session to prevent server restart auto logout
 const mongoStore = require('connect-mongo')(session);
 
+
+//installing flash
+
+const flash = require('connect-flash');
+const flashMiddleware = require('./config/flashMiddleware');
+
 //adding scss module
 const sassMiddleware = require('node-sass-middleware');
 
@@ -51,7 +57,7 @@ app.use(expressLayouts);
 app.set('layout extractStyles', true);
 app.set('layout extractScripts', true);
 
-//main routing file to access other controllers and routes
+
 
 
 
@@ -80,6 +86,10 @@ app.use(passport.session());
 
 app.use(passport.setAuthenticatedUser);
 
+app.use(flash()); 
+app.use(flashMiddleware.setFlash);
+
+//main routing file to access other controllers and routes
 app.use('/', require('./routes') );
 
 app.listen(port, function(err){
