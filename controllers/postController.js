@@ -9,7 +9,9 @@ module.exports.create  = async function(req,res){
         content: req.body.content,
         user:req.user._id
     });
-        return res.redirect('back');
+
+    req.flash('success','Posted successfully!')
+        return res.redirect('/');
     
     
 }
@@ -31,6 +33,7 @@ module.exports.comment  = function(req,res){
 
                 post.comments.push(comment);
                 post.save();
+                req.flash('success','Commented!');
                 res.redirect('/');
               }
             );
@@ -48,6 +51,7 @@ module.exports.deletePost = function(req,res){
         console.log(post);
         if(err){
             console.log(err);
+            req.flash('error','Error occurred')
             return res.redirect('/');
         }
 
@@ -60,14 +64,17 @@ module.exports.deletePost = function(req,res){
               Comment.deleteMany({post: req.params.id}, function(err){
                
                 if(err){
+                    req.flash('error','Something went wrong!');
                     console.log(err);
                     return res.redirect('/');
                 }
+                req.flash('success','Deleted your post');
                 return res.redirect('/');
               });
 
         }else{
 
+             req.flash('error','Something went wrong!');
             console.log("Not deleted");
             return res.redirect('back');
         }
@@ -87,9 +94,11 @@ module.exports.deleteComment = function(req,res){
         if((req.user._id).toString() == (comment.user._id).toString() ){
  
             comment.remove();
+            req.flash('success','Comment removed');
             return res.redirect('/');
         }
         else{
+            req.flash('error','Something went wrong!');
             console.log("comment not deleted");
             res.redirect('/');
         }

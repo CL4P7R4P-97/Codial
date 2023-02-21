@@ -66,7 +66,7 @@ module.exports.createSession = function(req,res){
 //             return res.redirect('/user/profile');
 //         }
 //     })
-    
+    console.log("loggedIN");
 req.flash('success', 'LoggedIn successfully');
 
             return res.redirect('/');
@@ -76,6 +76,8 @@ req.flash('success', 'LoggedIn successfully');
 module.exports.signup = function(req,res){
 
     if(req.isAuthenticated()){
+
+
 
         return res.render('home',{title: "Home"});
     }
@@ -95,13 +97,14 @@ module.exports.createUser = function(req,res){
     },function(err,user){
  
         if(err){
+            req.flash('error','Error finding user!');
             console.log("Error finding user!");
             return res.redirect('back');
         }
 
         if(!user){
             if(req.body.confirmPassword != req.body.password){
-                console.log("Wrong password");
+                req.flash('error','Both passwords should match!');
                 return res.redirect('back');
             }
             else{
@@ -113,11 +116,12 @@ module.exports.createUser = function(req,res){
                 }, function(err,user){
                     if(err){
                         console.log(err + "Error occurred while creating user!");
-                        
+                        return res.redirect('back');
                     }
                     else{
-                        console.log(user);
+                        req.flash('success','Account created!');
                     console.log("User created");
+                    return res.redirect('back');
                     }
                     
                 });
@@ -126,6 +130,7 @@ module.exports.createUser = function(req,res){
         }
         else{
 
+            req.flash('success','Account already exists!');
            console.log("user exists already!");
            return res.redirect('back');
         }
@@ -144,7 +149,7 @@ module.exports.destroySession  = function(req,res){
         console.log(err );
     });
     req.flash('success', 'LoggedOut successfully');
-    
+    console.log("loggedOut");
     return res.redirect('/');
 }
 
@@ -174,14 +179,16 @@ module.exports.updateProfile = function(req,res){
         User.findByIdAndUpdate(req.params.userId, {name: req.body.name, email: req.body.email}, function(err, data){
             if(err){
                 console.log("err while updating");
+                req.flash('error','Something went wrong!');
                 return res.redirect('/');
             }
-
+            req.flash('success','Profile updated!');
             console.log(data);
             return res.redirect('/');
         });
     }
     else{
+        req.flash('error','Not allowed');
         return res.status(401).send('Unauthorized');
     }
 }
