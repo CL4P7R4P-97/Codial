@@ -1,5 +1,6 @@
 const User = require('../models/user');
-
+const fs = require('fs');
+const path = require('path');
 module.exports.profile = async function(req,res){
 
 
@@ -172,23 +173,78 @@ module.exports.otherUserProfile = async function(req,res){
 }
 
 
-module.exports.updateProfile = function(req,res){
+module.exports.updateProfile = async function(req,res){
+
+    // if(req.user.id == req.params.userId){
+
+    //     User.findByIdAndUpdate(req.params.userId, {name: req.body.name, email: req.body.email}, function(err, data){
+    //         if(err){
+    //             console.log("err while updating");
+    //             req.flash('error','Something went wrong!');
+    //             return res.redirect('/');
+    //         }
+    //         req.flash('success','Profile updated!');
+    //         console.log(data);
+    //         return res.redirect('/');
+    //     });
+    // }
+    // else{
+    //     req.flash('error','Not allowed');
+    //     return res.status(401).send('Unauthorized');
+    // }
+
 
     if(req.user.id == req.params.userId){
 
-        User.findByIdAndUpdate(req.params.userId, {name: req.body.name, email: req.body.email}, function(err, data){
-            if(err){
-                console.log("err while updating");
+        try{
+
+             let user = await User.findById(req.params.userId);
+             User.uploadedAvatar(req,res,function(err){
+                if(err){
+
+                    console.log("Multer Error", err);
+                    return res.redirect('/');
+                }
+
+                // console.log(req);
+                user.name = req.body.name;
+                user.email = req.body.email;
+                console.log(req.file);
+                if(req.file){
+                    console.log("saving file");
+                    if(user.avatar){
+
+                       try{
+                        fs.unlinkSync(path.join(__dirname, '..',user.avatar));
+                       }
+                       catch(err){
+                        console.log("file not present but registered");
+                        req.flash('success','Profile updated');
+                        
+                       }
+                    }
+                    user.avatar = User.avatarPath + '/' + req.file.filename;
+                }
+                else{
+                    console.log("File Missing");
+                    return res.redirect('/');
+                }
+                user.save();
+               res.redirect('/');
+             })
+
+        }
+        catch(err){
+
+            console.log("err while updating");
                 req.flash('error','Something went wrong!');
                 return res.redirect('/');
-            }
-            req.flash('success','Profile updated!');
-            console.log(data);
-            return res.redirect('/');
-        });
+        }
     }
     else{
+
         req.flash('error','Not allowed');
-        return res.status(401).send('Unauthorized');
+      return res.status(401).send('Unauthorized');
     }
+
 }

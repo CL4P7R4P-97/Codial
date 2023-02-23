@@ -5,42 +5,70 @@ module.exports.create  = async function(req,res){
 
 
 
-  await  Post.create({
+  try{
+   let post = await  Post.create({
         content: req.body.content,
         user:req.user._id
     });
 
+     post = await Post.findById(post._id)
+     .populate('user');
+
+    //checking if ajax req is there (xml http request)
+
+    if(req.xhr){
+        console.log("has XHR req");
+        return res.status(200).json({
+        data: {
+            post: post
+        },
+        message: 'post created'
+        });
+    }
+    
+
     req.flash('success','Posted successfully!')
         return res.redirect('/');
+  }
+
+  catch(err){
+    console.log('error occured' + " " + err);
+    req.flash('error', 'Something went wrong while posting!');
+    res.redirect('/');
+  }
     
     
 }
 
 
-module.exports.comment  = function(req,res){
+module.exports.comment  = async function(req,res){
 
 
-    Post.findById(req.body.post, function(err,post){
+    
+    try{
+        let post = await Post.findById(req.body.post);
 
-        if(post){
-            Comment.create({
+        if (post){
+            let comment = await Comment.create({
                 content: req.body.content,
                 post: req.body.post,
-                user: req.body.postUser
-            },
-              
-              function(err,comment){
+                user: req.user._id
+            });
 
-                post.comments.push(comment);
-                post.save();
-                req.flash('success','Commented!');
-                res.redirect('/');
-              }
-            );
+            post.comments.push(comment);
+            post.save();
+            req.flash('success', 'Comment published!');
+
+            res.redirect('/');
         }
-    });
+    }catch(err){
+        req.flash('error', err);
+        return;
+    }
+         
+}  
+    
 
-}
 
 module.exports.deletePost = function(req,res){
 
@@ -60,6 +88,16 @@ module.exports.deletePost = function(req,res){
 
             console.log("deleting");
           post.remove();
+
+          if(req.xhr){
+            console.log("has XHR req");
+            return res.status(200).json({
+            data: {
+                post_id: req.params.id
+            },
+            message: 'post deleted'
+            });
+        }
 
               Comment.deleteMany({post: req.params.id}, function(err){
                

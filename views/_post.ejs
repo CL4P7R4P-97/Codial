@@ -1,7 +1,10 @@
 
-<% if(locals.user) { %>
+<div id="post-<%= post._id %>">
+    <% if(locals.user) { %>
     <% if(locals.user.id = post.user._id) {%>
-    <a href="/posts/deletePost/<%=post._id %>">(X)</a>
+        <p><%= post.user.name %></p>
+    <a href="/posts/deletePost/<%=post._id %>" class="delete-post-button">(X)</a>
     <% } %>
     <% } %>
 <div><%= post.content %></div>
+<%- include('_comment') %>

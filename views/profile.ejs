@@ -1,15 +1,21 @@
 <link rel="stylesheet" href="/css/profile.css">
-    <h6> <%= profile_user.name %>   </h6>
+    
+<img src="<%= user.avatar %>" alt="<%= user.name %>" width="100">
+<h6> <%= profile_user.name %>   </h6>
     <h6>  <%= profile_user.email%>  </h6>
+
+
 
     <% if (profile_user) { %>
     <% if (profile_user.id == user.id) { %>
      
-        <form action="/user/profile/udpate/<%= user.id %>" method="post">
+        <form action="/user/profile/udpate/<%= user.id %>" method="post" enctype="multipart/form-data" >
 
             <label for="user">Username</label>
             <input type="text" name="name"  value="<%= user.name %>" required>
             <input type="text" name="email" value="<%= user.email %>" required>
+            <label for="file">Upload avatar</label>
+            <input type="file" name="avatar">
             <input type="submit" value="Update">
 
         </form>

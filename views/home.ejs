@@ -7,7 +7,7 @@
     <section>
         <% if(locals.user) {%>
         <h4>Share post</h4>
-        <form action="/posts/create" method="post">
+        <form action="/posts/create" method="post" id="new-postForm">
             <textarea name="content" id="" cols="30" rows="10" placeholder="What's on you mind?" required></textarea>
             <input type="submit" value="Post">
         </form>
@@ -19,10 +19,10 @@
     <hr>
     <section>
         <h3>See what's happening around you & your peeps</h3>
-        <div>
+        <div id="post-list-container">
                 <% for (post of posts) {%>
                     <%- include('_post') %>
-                  <%- include('_comment') %>
+                 
                   <%}%>
         </div>
     </section>
@@ -41,3 +41,4 @@
     <% } %>
 
     </section>
+    <script src="/js/home_posts.js"></script>
