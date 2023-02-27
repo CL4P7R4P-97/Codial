@@ -35,4 +35,8 @@ router.get('/profile/:userId', passport.checkAuthentication, userController.othe
 
 router.post('/profile/udpate/:userId', passport.checkAuthentication, userController.updateProfile);
 
+//this url is given by passport
+router.get('/auth/google', passport.authenticate('google', {scope:['profile', 'email']}));
+
+router.get('/auth/google/callback', passport.authenticate('google', {failureRedirect: '/user/sign-in'}), userController.createSession);
 module.exports  = router;

@@ -15,7 +15,8 @@ const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const passport = require('passport');
 const passportt = require('./config/passport-local-startegy');
-
+const passportJWT = require('./config/passport-jwt-strategy');
+const passportGoogle = require('./config/passport-google-oauth2-strategy');
 //for saving user session to prevent server restart auto logout
 const mongoStore = require('connect-mongo')(session);
 

@@ -38,7 +38,8 @@ passport.serializeUser(function(user,done){
 
     //sending user id to cookie
    
-    done(null,user[0]._id);
+    console.log("passport statement" + " " +  user);
+    done(null,user);
 });
 
 passport.deserializeUser(function(id, done){
