@@ -1,19 +1,20 @@
 const nodemailer = require('../config/nodemailer');
 
-exports.newComment = (comment) => {
+exports.sendLink = (resetToken) => {
 
-    console.log(comment + " " + "from nodemailer");
+    
     //previous path part is there in mailers/comment_mailer.js after which this will be appended to send mail accordingly, later
     //- it could be for login or post created or other changes made thus requiring other templates.
    
-    let htmlString = nodemailer.renderTemplate({comment:comment}, '/comments/new_comment.ejs');
+    console.log(resetToken);
+    let htmlString = nodemailer.renderTemplate({tokenObject:resetToken}, '/resetPass/new_pass.ejs');
 
    
     nodemailer.transporter.sendMail({
 
         from: 'ashish9780kumar@gmail.com',
-        to: comment.user.email,
-        subject: "New Comment Published!",
+        to: resetToken.user.email,
+        subject: "Reset password",
         html: htmlString
     }, (err,info)=>{
         if(err){
