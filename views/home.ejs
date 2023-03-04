@@ -41,6 +41,7 @@
     <% } %>
 
     </section>
+    <%- include('_chat_box') %>
     <!-- importing this script for creating the comments -->
 <script src="/js/home_post_comments.js" ></script>
 <script src="/js/home_posts.js"></script>
@@ -53,3 +54,14 @@
         let toggleLike = new ToggleLike(self);
     });
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.6.1/socket.io.js"></script>
+<script src="/js/chat_engine.js"></script>
+
+<% if (locals.user) { %>
+    
+   
+<script>
+
+    new chatEngine('user-chat-box', '<%= locals.user.email %>')
+</script> 
+    <%}%>

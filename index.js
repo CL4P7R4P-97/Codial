@@ -20,6 +20,11 @@ const passportGoogle = require('./config/passport-google-oauth2-strategy');
 //for saving user session to prevent server restart auto logout
 const mongoStore = require('connect-mongo')(session);
 
+//adding chatServer to socket.io
+const chatServer = require('http').Server(app);
+const chatSocket = require('./config/chat_sockets').chatSockets(chatServer);
+chatServer.listen(5000);
+console.log('Chat server is listening on port 5000');
 
 //installing flash
 
