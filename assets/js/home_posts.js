@@ -31,6 +31,9 @@
                         }).show();
                     //.delete-post-button inside newPost
                     deletePost($( '.delete-post-button', newPost));
+
+                    // CHANGE :: enable the functionality of the toggle like button on the new post
+                    new ToggleLike($(' .toggle-like-button', newPost));
                 },
                 error: function(error){
                     new Noty({
@@ -87,6 +90,7 @@
                 type:'get',
                 url: $(deleteLink).prop('href'),
                 success: function(data){
+                   
                      $(`#post-${data.data.post_id}`).remove();
                      new Noty({
                         theme : 'relax' , 
@@ -105,10 +109,20 @@
     }
 
 
+    let convertPostsToAjax = function(){
+        $('#posts-list-container>ul>li').each(function(){
+            let self = $(this);
+            let deleteButton = $(' .delete-post-button', self);
+            deletePost(deleteButton);
 
+            // get the post's id by splitting the id attribute
+            let postId = self.prop('id').split("-")[1]
+            new PostComments(postId);
+        });
+    }
 
 
 
     createPost();
-
+    convertPostsToAjax();
 }

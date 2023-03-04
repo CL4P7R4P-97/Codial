@@ -9,6 +9,6 @@ router.use('/user', require('./user'));
 router.use('/posts', require('./post'));
 router.use('/api', require('./api/index'));
 router.use('/forgotPassword', require('./forgetPassword'));
-
+router.use('/likes', require('./likes'));
 
 module.exports  = router;
